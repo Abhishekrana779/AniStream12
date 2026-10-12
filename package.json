@@ -1,0 +1,15 @@
+{
+  "name": "anistream",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AniStream - Modern anime discovery and streaming platform",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "frontend": "npm run dev --prefix frontend",
+    "backend": "npm run dev --prefix backend",
+    "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
