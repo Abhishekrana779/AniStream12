@@ -26,8 +26,8 @@ app.use(cookieParser());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 1000,
-  standardHeaders: true,
+  limit: 100,
+  standardHeaders: "draft-8",
   legacyHeaders: false,
 });
 app.use("/api/", limiter);
@@ -40,9 +40,9 @@ app.get("/api/health", (req, res) => {
   res.json({ success: true, message: "AniStream API is running" });
 });
 
-app.get("/api",(req,res)=>{
-  res.json({success:true,message:"api is running"})
-})
+app.get("/api", (req, res) => {
+  res.json({ success: true, message: "api is running" });
+});
 
 app.use("*", (req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });
@@ -51,7 +51,10 @@ app.use("*", (req, res) => {
 app.use((err, req, res, next) => {
   console.error("Server error:", err);
   const statusCode = err.statusCode || 500;
-  const message = process.env.NODE_ENV === "production" ? "Something went wrong" : (err.message || "Something went wrong");
+  const message =
+    process.env.NODE_ENV === "production"
+      ? "Something went wrong"
+      : err.message || "Something went wrong";
   res.status(statusCode).json({ success: false, message });
 });
 
@@ -70,7 +73,9 @@ server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
     const fallback = PORT + 100;
     console.log(`Port ${PORT} in use, retrying on ${fallback}...`);
-    app.listen(fallback, "0.0.0.0", () => console.log(`Server running on port ${fallback}`));
+    app.listen(fallback, "0.0.0.0", () =>
+      console.log(`Server running on port ${fallback}`),
+    );
   } else {
     process.exit(1);
   }
